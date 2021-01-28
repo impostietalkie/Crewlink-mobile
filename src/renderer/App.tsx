@@ -9,9 +9,8 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import Voice from './Voice';
-import Menu from './Menu';
 import { ipcRenderer } from 'electron';
-import { AmongUsState } from '../common/AmongUsState';
+import { AmongUsState, Player } from '../common/AmongUsState';
 import Settings, {
 	settingsReducer,
 	lobbySettingsReducer,
@@ -46,6 +45,8 @@ import prettyBytes from 'pretty-bytes';
 import './css/index.css';
 import Typography from '@material-ui/core/Typography';
 import SupportLink from './SupportLink';
+import SelectColorMenu from './SelectColorMenu';
+import EnterRoomCodeMenu from './EnterRoomCodeMenu';
 
 let appVersion = '';
 if (typeof window !== 'undefined' && window.location) {
@@ -178,13 +179,16 @@ class ErrorBoundary extends React.Component<
 }
 
 const App: React.FC = function () {
-	const [state, setState] = useState<AppState>(AppState.MENU);
+	const [, setState] = useState<AppState>(AppState.MENU);
 	const [gameState, setGameState] = useState<AmongUsState>({} as AmongUsState);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [error, setError] = useState('');
 	const [updaterState, setUpdaterState] = useState<AutoUpdaterState>({
 		state: 'unavailable',
 	});
+	const [roomCode, setRoomCode] = useState<string>('');
+	const [player, setPlayer] = useState<Player | undefined>(undefined);
+
 	const settings = useReducer(settingsReducer, {
 		alwaysOnTop: false,
 		microphone: 'Default',
@@ -277,13 +281,12 @@ const App: React.FC = function () {
 	}, [settings]);
 
 	let page;
-	switch (state) {
-		case AppState.MENU:
-			page = <Menu error={error} />;
-			break;
-		case AppState.VOICE:
-			page = <Voice error={error} />;
-			break;
+	if (player) {
+		page = <Voice error={error} />;
+	} else if (roomCode) {
+		page = <SelectColorMenu setPlayer={setPlayer}/>;
+	} else {
+		page = <EnterRoomCodeMenu setRoomCode={setRoomCode}/>;
 	}
 
 	return (

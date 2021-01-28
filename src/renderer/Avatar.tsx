@@ -59,6 +59,7 @@ export interface AvatarProps {
 	muted?: boolean;
 	connectionState?: 'disconnected' | 'novoice' | 'connected';
 	style?: React.CSSProperties;
+	onSelect?: (player: Player) => void;
 }
 
 const Avatar: React.FC<AvatarProps> = function ({
@@ -71,6 +72,7 @@ const Avatar: React.FC<AvatarProps> = function ({
 	size,
 	connectionState,
 	style,
+	onSelect,
 }: AvatarProps) {
 	const status = isAlive ? 'alive' : 'dead';
 	let image = players[status][player.colorId];
@@ -105,7 +107,7 @@ const Avatar: React.FC<AvatarProps> = function ({
 
 	return (
 		<Tooltip title={player.name} arrow placement="top">
-			<div className={classes.avatar} style={style}>
+			<div className={classes.avatar} style={style} onClick={onSelect ? () => onSelect(player) : undefined}>
 				<Canvas
 					className={classes.canvas}
 					src={image}
