@@ -6,7 +6,6 @@ import windowStateKeeper from 'electron-window-state';
 import { join as joinPath } from 'path';
 import { format as formatUrl } from 'url';
 import './hook';
-import { overlayWindow as electronOverlayWindow } from 'electron-overlay-window';
 import { initializeIpcHandlers, initializeIpcListeners } from './ipc-handlers';
 import { IpcRendererMessages } from '../common/ipc-messages';
 import { ProgressInfo } from 'builder-util-runtime';
@@ -15,7 +14,6 @@ import iohook from 'iohook';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let mainWindow: BrowserWindow | null = null;
-let overlayWindow: BrowserWindow | null = null;
 
 app.commandLine.appendSwitch('disable-pinch');
 
@@ -73,18 +71,6 @@ function createMainWindow() {
 	}
 	window.webContents.userAgent = `CrewLink/${crewlinkVersion} (${process.platform})`;
 
-	window.on('closed', () => {
-		mainWindow = null;
-		if (overlayWindow != null) {
-			try {
-				overlayWindow.close();
-			} catch (_) {
-				console.error(_);
-			}
-			overlayWindow = null;
-		}
-	});
-
 	window.webContents.on('devtools-opened', () => {
 		window.focus();
 		setImmediate(() => {
@@ -92,46 +78,6 @@ function createMainWindow() {
 		});
 	});
 
-	return window;
-}
-
-function createOverlay() {
-	const window = new BrowserWindow({
-		width: 400,
-		height: 300,
-		webPreferences: {
-			nodeIntegration: true,
-			webSecurity: false,
-		},
-		...electronOverlayWindow.WINDOW_OPTS,
-	});
-
-	if (isDevelopment) {
-		window.loadURL(
-			`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?version=${autoUpdater.currentVersion.version}&view=overlay`
-		);
-	} else {
-		window.loadURL(
-			formatUrl({
-				pathname: joinPath(__dirname, 'index.html'),
-				protocol: 'file',
-				query: {
-					version: autoUpdater.currentVersion.version,
-					view: 'overlay',
-				},
-				slashes: true,
-			})
-		);
-	}
-	window.setIgnoreMouseEvents(true);
-	electronOverlayWindow.attachTo(window, 'Among Us');
-
-	if (isDevelopment) {
-		// Force devtools into detached mode otherwise they are unusable
-		window.webContents.openDevTools({
-			mode: 'detach',
-		});
-	}
 	return window;
 }
 
@@ -205,10 +151,6 @@ if (!gotTheLock) {
 	app.on('window-all-closed', () => {
 		// on macOS it is common for applications to stay open until the user explicitly quits
 		if (process.platform !== 'darwin') {
-			if (overlayWindow != null) {
-				overlayWindow.close();
-				overlayWindow = null;
-			}
 			app.quit();
 		}
 	});
@@ -227,8 +169,7 @@ if (!gotTheLock) {
 	// create main BrowserWindow when electron is ready
 	app.whenReady().then(() => {
 		mainWindow = createMainWindow();
-		overlayWindow = createOverlay();
-		initializeIpcListeners(overlayWindow);
+		initializeIpcListeners();
 		initializeIpcHandlers();
 	});
 }

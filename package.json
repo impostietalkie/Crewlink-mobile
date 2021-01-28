@@ -28,10 +28,12 @@
   },
   "iohook": {
     "targets": [
+      "node-59",
       "electron-80"
     ],
     "platforms": [
-      "win32"
+      "win32",
+      "darwin"
     ],
     "arches": [
       "x64",
@@ -44,11 +46,10 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "axios": "^0.21.0",
     "deep-equal": "^2.0.5",
-    "electron-overlay-window": "^1.0.4",
     "electron-store": "^6.0.1",
     "electron-updater": "^4.3.5",
     "electron-window-state": "^5.0.3",
-    "iohook": "^0.7.1",
+    "iohook": "^0.7.2",
     "pretty-bytes": "^5.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
