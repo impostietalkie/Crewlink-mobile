@@ -24,7 +24,7 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 				spellCheck={false}
 				label="Room Code"
 				value={roomCodeTmp}
-				onChange={(e) => setRoomCodeTmp(e.target.value)}
+				onChange={(e) => e.target.value.length <= 6 && setRoomCodeTmp(e.target.value.toUpperCase())}
 				variant="outlined"
 				color="primary"
 				helperText={hasInputError ? 'Room not found' : ''}
