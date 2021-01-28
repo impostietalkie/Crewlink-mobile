@@ -93,7 +93,5 @@ Any contributions you make are greatly appreciated.
 Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
 
 
-[license-shield]: https://img.shields.io/github/license/ottomated/CrewLink.svg?style=flat-square
-[license-url]: https://github.com/ottomated/CrewLink-server/blob/master/LICENSE
-[appveyor-shield]: https://img.shields.io/appveyor/build/ottomated/crewlink
-[appveyor-url]: https://ci.appveyor.com/project/ottomated/crewlink
+[license-shield]: https://img.shields.io/github/license/impostietalkie/CrewLink.svg?style=flat-square
+[license-url]: https://github.com/impostietalkie/CrewLink-server/blob/master/LICENSE

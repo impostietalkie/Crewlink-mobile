@@ -312,13 +312,6 @@ const App: React.FC = function () {
 											</DialogContentText>
 										)}
 									</DialogContent>
-									{updaterState.state === 'error' && (
-										<DialogActions>
-											<Button href="https://github.com/ottomated/CrewLink/releases/latest">
-												Download Manually
-											</Button>
-										</DialogActions>
-									)}
 								</Dialog>
 								{page}
 							</>

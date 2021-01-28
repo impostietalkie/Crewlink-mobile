@@ -28,7 +28,7 @@ const Footer: React.FC = function () {
 	const classes = useStyles();
 	return (
 		<div className={classes.footer}>
-			<Typography>Made by Ottomated</Typography>
+			<Typography>Originally Made by Ottomated</Typography>
 			<div className={classes.row}>
 				<svg
 					width={36}
