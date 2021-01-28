@@ -241,15 +241,6 @@ const storeConfig: Store.Options<ISettings> = {
 				commsSabotage: true,
 			},
 		},
-		meetingOverlay: {
-			type: 'boolean',
-			default: true,
-		},
-		overlayPosition: {
-			type: 'string',
-			enum: ['left', 'right', 'hidden'],
-			default: 'right',
-		},
 	},
 };
 
@@ -814,45 +805,6 @@ const Settings: React.FC<SettingsProps> = function ({
 						/>
 					</Grid>
 				</Grid>
-				<Divider />
-				<Typography variant="h6">Overlay</Typography>
-				<TextField
-					select
-					fullWidth
-					label="Position"
-					variant="outlined"
-					color="secondary"
-					value={settings.overlayPosition}
-					className={classes.shortcutField}
-					SelectProps={{ native: true }}
-					InputLabelProps={{ shrink: true }}
-					onChange={(ev) => {
-						setSettings({
-							type: 'setOne',
-							action: ['overlayPosition', ev.target.value],
-						});
-					}}
-				>
-					{(storeConfig.schema?.overlayPosition?.enum as string[]).map(
-						(position) => (
-							<option key={position} value={position}>
-								{position[0].toUpperCase()}
-								{position.substring(1)}
-							</option>
-						)
-					)}
-				</TextField>
-				<FormControlLabel
-					label="Meeting Overlay"
-					checked={settings.meetingOverlay}
-					onChange={(_, checked: boolean) => {
-						setSettings({
-							type: 'setOne',
-							action: ['meetingOverlay', checked],
-						});
-					}}
-					control={<Checkbox />}
-				/>
 				<Divider />
 				<Typography variant="h6">Advanced</Typography>
 				<FormControlLabel

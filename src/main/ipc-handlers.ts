@@ -1,9 +1,9 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 
-import { IpcMessages, IpcOverlayMessages } from '../common/ipc-messages';
+import { IpcMessages } from '../common/ipc-messages';
 
 // Listeners are fire and forget, they do not have "responses" or return values
-export const initializeIpcListeners = (overlayWindow: BrowserWindow): void => {
+export const initializeIpcListeners = (): void => {
 	ipcMain.on(
 		IpcMessages.SHOW_ERROR_DIALOG,
 		(e, opts: { title: string; content: string }) => {
@@ -29,13 +29,6 @@ export const initializeIpcListeners = (overlayWindow: BrowserWindow): void => {
 		}
 		app.quit();
 	});
-
-	ipcMain.on(
-		IpcMessages.SEND_TO_OVERLAY,
-		(_, event: IpcOverlayMessages, ...args: unknown[]) => {
-			overlayWindow.webContents.send(event, ...args);
-		}
-	);
 };
 
 // Handlers are async cross-process instructions, they should have a return value

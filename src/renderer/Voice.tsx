@@ -14,15 +14,12 @@ import {
 	OtherTalking,
 	Player,
 	SocketClientMap,
-	VoiceState,
 } from '../common/AmongUsState';
 import Peer from 'simple-peer';
 import { ipcRenderer } from 'electron';
 import VAD from './vad';
 import { ILobbySettings, ISettings } from '../common/ISettings';
 import {
-	IpcMessages,
-	IpcOverlayMessages,
 	IpcRendererMessages,
 } from '../common/ipc-messages';
 import Typography from '@material-ui/core/Typography';
@@ -776,21 +773,6 @@ const Voice: React.FC<VoiceProps> = function ({
 		if (socketClients[k].playerId !== undefined)
 			playerSocketIds[socketClients[k].playerId] = k;
 	}
-
-	// Pass voice state to overlay
-	useEffect(() => {
-		ipcRenderer.send(
-			IpcMessages.SEND_TO_OVERLAY,
-			IpcOverlayMessages.NOTIFY_VOICE_STATE_CHANGED,
-			{
-				otherTalking,
-				playerSocketIds,
-				otherDead,
-				socketClients,
-				audioConnected,
-			} as VoiceState
-		);
-	}, [otherTalking, playerSocketIds, otherDead, socketClients, audioConnected]);
 
 	return (
 		<div className={classes.root}>
