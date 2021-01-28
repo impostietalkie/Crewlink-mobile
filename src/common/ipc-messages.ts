@@ -3,7 +3,6 @@ import { ProgressInfo } from 'builder-util-runtime';
 // Renderer --> Main (send/on)
 export enum IpcMessages {
 	SHOW_ERROR_DIALOG = 'SHOW_ERROR_DIALOG',
-	OPEN_AMONG_US_GAME = 'OPEN_AMONG_US_GAME',
 	RESTART_CREWLINK = 'RESTART_CREWLINK',
 	QUIT_CREWLINK = 'QUIT_CREWLINK',
 	SEND_TO_OVERLAY = 'SEND_TO_OVERLAY',

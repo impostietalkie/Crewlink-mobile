@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import GameReader from './GameReader';
+import GameStateReader from './GameReader';
 import iohook from 'iohook';
 import Store from 'electron-store';
 import { ISettings } from '../common/ISettings';
@@ -23,7 +23,7 @@ interface IOHookEvent {
 const store = new Store<ISettings>();
 
 let readingGame = false;
-let gameReader: GameReader;
+let gameStateReader: GameStateReader;
 
 ipcMain.on(IpcSyncMessages.GET_INITIAL_STATE, (event) => {
 	if (!readingGame) {
@@ -33,7 +33,7 @@ ipcMain.on(IpcSyncMessages.GET_INITIAL_STATE, (event) => {
 		event.returnValue = null;
 		return;
 	}
-	event.returnValue = gameReader.lastState;
+	event.returnValue = gameStateReader.lastState;
 });
 
 ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
@@ -113,11 +113,11 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 
 		iohook.start();
 
-		// Read game memory
-		gameReader = new GameReader(event.sender.send.bind(event.sender));
+		// Get Game State from web
+		gameStateReader = new GameStateReader(event.sender.send.bind(event.sender));
 
 		const frame = () => {
-			const err = gameReader.loop();
+			const err = gameStateReader.fetchStateFromServer();
 			if (err) {
 				readingGame = false;
 				event.sender.send(IpcRendererMessages.ERROR, err);
@@ -126,8 +126,6 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 			}
 		};
 		frame();
-	} else if (gameReader) {
-		gameReader.amongUs = null;
 	}
 });
 
