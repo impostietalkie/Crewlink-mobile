@@ -3,12 +3,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
 import Avatar from './Avatar';
 import { Player } from '../common/AmongUsState';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
 	otherplayers: {
 		width: 225,
 		height: 225,
-		margin: '60px auto',
+		margin: '20px auto',
 		'& .MuiGrid-grid-xs-1': {
 			maxHeight: '8.3333333%',
 		},
@@ -173,29 +174,31 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 			container
 			spacing={1}
 			className={classes.otherplayers}
-			alignItems="flex-start"
+			alignItems="center"
 			alignContent="flex-start"
-			justify="flex-start"
+			justify="center"
 		>
+			<DialogTitle>Select your player</DialogTitle>
 			{otherPlayers.map((player) => {
 				return (
-					<Grid
-						item
-						key={player.id}
-						xs={getPlayersPerRow(otherPlayers.length)}
-						style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', height: '100%' }}
-					>
-						<Avatar
-							style={{ cursor: 'pointer' }}
-							connectionState={'connected'}
-							player={player}
-							talking={false}
-							borderColor="#2ecc71"
-							isAlive={true}
-							size={50}
-							onSelect={setPlayer}
-						/>
-					</Grid>
+					<>
+						<Grid
+							item
+							key={player.id}
+							xs={getPlayersPerRow(otherPlayers.length)}
+						>
+							<Avatar
+								style={{ cursor: 'pointer' }}
+								connectionState={'connected'}
+								player={player}
+								talking={false}
+								borderColor="#2ecc71"
+								isAlive={true}
+								size={50}
+								onSelect={setPlayer}
+							/>
+						</Grid>
+					</>
 				);
 			})}
 		</Grid>
