@@ -13,6 +13,9 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 	const hasInputError = false;
 
 	const onSubmit = () => {
+		if (roomCodeTmp.length !== 6) {
+			return;
+		}
 		// TODO do the error checking
 		setRoomCode(roomCodeTmp);
 	};
@@ -28,6 +31,7 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 				variant="outlined"
 				color="primary"
 				helperText={hasInputError ? 'Room not found' : ''}
+				onKeyDown={(e) => e.key === 'Enter' && onSubmit()}
 			/>
 			<Button
 				color="primary"
