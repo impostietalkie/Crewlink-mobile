@@ -14,9 +14,7 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 
 	const onSubmit = () => {
 		// TODO do the error checking
-		console.log('test');
 		setRoomCode(roomCodeTmp);
-		console.log('test');
 	};
 
 	return (
@@ -34,7 +32,7 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 			<Button
 				color="primary"
 				disabled={roomCodeTmp.length !== 6}
-				onClick={() => { console.log('onSubmit'); onSubmit(); }}
+				onClick={onSubmit}
 			>Submit</Button>
 		</div>
 	);
