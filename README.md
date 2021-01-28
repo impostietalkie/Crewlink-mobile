@@ -2,24 +2,20 @@
 
 <br />
 <p align="center">
-  <a href="https://github.com/ottomated/CrewLink">
+  <a href="https://github.com/impostietalkie/CrewLink-mobile">
     <img src="logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">CrewLink</h3>
+  <h3 align="center">Impostie Talkie Mobile</h3>
 
   <p align="center">
     Free, open, Among Us proximity voice chat.
     <br />
-    <a href="https://github.com/ottomated/CrewLink/issues">Report Bug</a>
+    <a href="https://github.com/impostietalkie/CrewLink-mobile/issues">Report Bug</a>
     ·
-    <a href="https://github.com/ottomated/CrewLink/issues">Request Feature</a>
+    <a href="https://github.com/impostietalkie/CrewLink-mobile/issues">Request Feature</a>
     ·
     <a href="#installation"><b>INSTALLATION INSTRUCTIONS</b></a>
-  </p>
-  <p align="center">
-  <b><a href="https://paypal.me/ottomated">DONATE TO THE PROJECT</a></b>
-  (all donations will be used for server costs or paying for college)
   </p>
 </p>
 
@@ -40,23 +36,19 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project implements proximity voice chat in Among Us. Everyone in an Among Us lobby with this program running will be able to communicate over voice in-game, with no third-party programs required. Spatial audio ensures that you can only hear people close to you.
+This project implements proximity voice chat in Among Us for non PC players. As long as 1 player in the lobby is running the master version the rest can play on any device and join voice chat with this website.
 
 ## Installation
 
-Download the latest version from [releases](https://github.com/ottomated/CrewLink/releases) and run the `CrewLink-Setup-X.X.X.exe` file. You may get antivirus warnings, because this program hooks into the Among Us process to read game data.
+Download the latest version from [releases](https://github.com/impostietalkie/CrewLink-mobile/releases) and run the `CrewLink-Setup-X.X.X.exe` file. You may get antivirus warnings, because this program hooks into the Among Us process to read game data.
 
-If you can, you should use a private server by deploying [this repository](https://github.com/ottomated/CrewLink-server).
-
-### Setup Instructions (click)
-
-[![Setup Video](https://img.youtube.com/vi/_8F4f5iQEIc/0.jpg)](https://www.youtube.com/watch?v=_8F4f5iQEIc "CrewLink Setup Instructions")
+If you can, you should use a private server by deploying [this repository](https://github.com/impostietalkie/CrewLink-server).
 
 ## Development
 
-You only need to follow the below instructions if you are trying to modify this software. Otherwise, please download the latest version from the [github releases](https://github.com/ottomated/CrewLink/releases).
+You only need to follow the below instructions if you are trying to modify this software. Otherwise, please download the latest version from the [github releases](https://github.com/impostietalkie/CrewLink-mobile/releases).
 
-Server code is located at [ottomated/CrewLink-server](https://github.com/ottomated/CrewLink-server). Please use a local server for development purposes.
+Server code is located at [impostietalkie/CrewLink-server](https://github.com/impostietalkie/CrewLink-server). Please use a local server for development purposes.
 
 ### Prerequisites
 
@@ -72,8 +64,8 @@ npm install yarn -g
 
 1. Clone the repo
 ```sh
-git clone https://github.com/ottomated/CrewLink.git
-cd CrewLink
+git clone https://github.com/impostietalkie/CrewLink-mobile.git
+cd CrewLink-mobile
 ```
 2. Install NPM packages
 ```sh
