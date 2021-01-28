@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
 	otherplayers: {
 		width: 225,
 		height: 225,
-		margin: '4px auto',
+		margin: '24px auto',
 		'& .MuiGrid-grid-xs-1': {
 			maxHeight: '8.3333333%',
 		},
@@ -32,7 +32,26 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 	setPlayer,
 }) {
 	const classes = useStyles();
-	const otherPlayers: Player[] = []; // TODO get this somehow
+	const otherPlayers: Player[] = [{
+		ptr: 1,
+		id: 1,
+		clientId: 1,
+		name: 'Carter',
+		colorId: 1,
+		hatId: 1,
+		petId: 1,
+		skinId: 1,
+		disconnected: false,
+		isImpostor: false,
+		isDead: false,
+		taskPtr: 1,
+		objectPtr: 1,
+		isLocal: false,
+	
+		x: 1,
+		y: 1,
+		inVent: false,
+	}]; // TODO get this somehow
 	
 	return (
 		<Grid
@@ -49,11 +68,11 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 						item
 						key={player.id}
 						xs={getPlayersPerRow(otherPlayers.length)}
+						style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', height: '100%' }}
 					>
 						<Avatar
-							connectionState={
-								'connected'
-							}
+							style={{ cursor: 'pointer' }}
+							connectionState={'connected'}
 							player={player}
 							talking={false}
 							borderColor="#2ecc71"
