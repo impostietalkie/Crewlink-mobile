@@ -186,9 +186,11 @@ function calculateVoiceAudio(
 export interface VoiceProps {
 	error: string;
 	player: Player;
+	roomCode: string;
 	isPushToTalkKeyDown: boolean;
 	isDeafened: boolean;
 	isMuted: boolean;
+	setGameState: (gameState: AmongUsState) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -246,9 +248,11 @@ const useStyles = makeStyles((theme) => ({
 const Voice: React.FC<VoiceProps> = function ({
 	error: initialError,
 	player,
+	roomCode,
 	isPushToTalkKeyDown,
 	isDeafened,
 	isMuted,
+	setGameState,
 }: VoiceProps) {
 	const [error, setError] = useState(initialError);
 	const [settings, setSettings] = useContext(SettingsContext);
@@ -300,9 +304,13 @@ const Voice: React.FC<VoiceProps> = function ({
 
 	useEffect(() => {
 		(async () => {
-			const context = new AudioContext();
-			convolverBuffer.current = await context.decodeAudioData(reverbOgx);
-			await context.close();
+			try {
+				const context = new AudioContext();
+				convolverBuffer.current = await context.decodeAudioData(reverbOgx);
+				await context.close();
+			} catch (e) {
+				console.log('error', e);
+			}
 		})();
 	}, []);
 
@@ -433,6 +441,10 @@ const Voice: React.FC<VoiceProps> = function ({
 			setConnected(false);
 		});
 
+		socket.on('pullstate', (state: AmongUsState) => {
+			setGameState(state);
+		})
+
 		// Initialize variables
 		let audioListener: {
 			connect: () => void;
@@ -448,6 +460,7 @@ const Voice: React.FC<VoiceProps> = function ({
 		// Get microphone settings
 		if (settingsRef.current.microphone.toLowerCase() !== 'default')
 			audio.deviceId = settingsRef.current.microphone;
+
 		navigator.getUserMedia(
 			{ video: false, audio },
 			async (stream) => {
@@ -702,12 +715,12 @@ const Voice: React.FC<VoiceProps> = function ({
 		return otherPlayers;
 	}, [gameState]);
 
-	// Connect to P2P negotiator, when lobby and connect code change
+	// Connect to P2P negotiator on when connect, roomCode, or player change
 	useEffect(() => {
-		if (connect?.connect && gameState.lobbyCode && myPlayer?.id !== undefined) {
-			connect.connect(gameState.lobbyCode, myPlayer.id, gameState.clientId);
+		if (connect?.connect && roomCode && player.id !== undefined) {
+			connect.connect(roomCode, player.id, player.clientId);
 		}
-	}, [connect?.connect, gameState?.lobbyCode]);
+	}, [connect?.connect, roomCode, player]);
 
 	// Connect to P2P negotiator, when game mode change
 	useEffect(() => {

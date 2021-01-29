@@ -223,7 +223,7 @@ class ErrorBoundary extends React.Component<
 }
 
 const App: React.FC = function () {
-	const [gameState, ] = useState<AmongUsState>({} as AmongUsState);
+	const [gameState, setGameState] = useState<AmongUsState>({} as AmongUsState);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [error, ] = useState('');
 	const [roomCode, setRoomCode] = useState<string>('');
@@ -337,7 +337,7 @@ const App: React.FC = function () {
 	let page;
 	if (player) {
 		page = (
-			<Voice error={error} player={player} isPushToTalkKeyDown={isPushToTalkKeyDown} isDeafened={isDeafened} isMuted={isMuted}/>
+			<Voice error={error} player={player} isPushToTalkKeyDown={isPushToTalkKeyDown} isDeafened={isDeafened} isMuted={isMuted} setGameState={setGameState} roomCode={roomCode}/>
 		);
 	} else if (roomCode) {
 		page = <SelectColorMenu setPlayer={setPlayer} roomCode={roomCode}/>;
