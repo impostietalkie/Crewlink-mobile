@@ -99,11 +99,6 @@ const TitleBar: React.FC<TitleBarProps> = function ({
 	);
 };
 
-// enum AppState {
-// 	MENU,
-// 	VOICE,
-// }
-
 interface ErrorBoundaryProps {
 	children: ReactChild;
 }
@@ -165,13 +160,9 @@ class ErrorBoundary extends React.Component<
 }
 
 const App: React.FC = function () {
-	// const [, setState] = useState<AppState>(AppState.MENU);
 	const [gameState, ] = useState<AmongUsState>({} as AmongUsState);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [error, ] = useState('');
-	// const [updaterState, setUpdaterState] = useState<AutoUpdaterState>({
-	// 	state: 'unavailable',
-	// });
 	const [roomCode, setRoomCode] = useState<string>('');
 	const [player, setPlayer] = useState<Player | undefined>(undefined);
 
@@ -180,7 +171,7 @@ const App: React.FC = function () {
 		microphone: 'Default',
 		speaker: 'Default',
 		pushToTalk: false,
-		serverURL: 'https://crewl.ink',
+		serverURL: 'http://impostietalkie.herokuapp.com/',
 		pushToTalkShortcut: 'V',
 		deafenShortcut: 'RControl',
 		muteShortcut: 'RAlt',
@@ -222,34 +213,6 @@ const App: React.FC = function () {
 									open={settingsOpen}
 									onClose={() => setSettingsOpen(false)}
 								/>
-								{/* <Dialog fullWidth open={updaterState.state !== 'unavailable'}>
-									<DialogTitle>Updating...</DialogTitle>
-									<DialogContent>
-										{(updaterState.state === 'downloading' ||
-											updaterState.state === 'downloaded') &&
-											updaterState.progress && (
-												<>
-													<LinearProgress
-														variant={
-															updaterState.state === 'downloaded'
-																? 'indeterminate'
-																: 'determinate'
-														}
-														value={updaterState.progress.percent}
-													/>
-													<DialogContentText>
-														{prettyBytes(updaterState.progress.transferred)} /{' '}
-														{prettyBytes(updaterState.progress.total)}
-													</DialogContentText>
-												</>
-											)}
-										{updaterState.state === 'error' && (
-											<DialogContentText color="error">
-												{updaterState.error}
-											</DialogContentText>
-										)}
-									</DialogContent>
-								</Dialog> */}
 								{page}
 							</>
 						</ErrorBoundary>

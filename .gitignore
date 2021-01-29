@@ -5,3 +5,4 @@ build/
 thumbs.db
 .idea/
 yarn-error.log
+.eslintcache

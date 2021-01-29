@@ -370,7 +370,7 @@ const URLInput: React.FC<URLInputProps> = function ({
 						onClick={() => {
 							setOpen(false);
 							setURLValid(true);
-							onValidURL('https://crewl.ink');
+							onValidURL('http://impostietalkie.herokuapp.com/');
 						}}
 					>
 						Reset to default

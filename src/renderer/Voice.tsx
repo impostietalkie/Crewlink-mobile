@@ -192,11 +192,6 @@ export interface VoiceProps {
 }
 
 const useStyles = makeStyles((theme) => ({
-	error: {
-		position: 'absolute',
-		top: '50%',
-		transform: 'translateY(-50%)',
-	},
 	root: {
 		paddingTop: theme.spacing(3),
 	},
@@ -751,7 +746,7 @@ const Voice: React.FC<VoiceProps> = function ({
 	return (
 		<div className={classes.root}>
 			{error && (
-				<div className={classes.error}>
+				<div>
 					<Typography align="center" variant="h6" color="error">
 						ERROR
 					</Typography>

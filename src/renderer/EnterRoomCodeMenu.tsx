@@ -23,7 +23,7 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 	};
 
 	return (
-		<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', height: '100%' }}>
+		<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', height: '200px' }}>
 			<TextField
 				error={hasInputError /*TODO this once we have the backend for it*/}
 				spellCheck={false}
