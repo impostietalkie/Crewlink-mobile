@@ -15,7 +15,6 @@ interface UseStylesParams {
 const useStyles = makeStyles(() => ({
 	avatar: {
 		borderRadius: '50%',
-		overflow: 'hidden',
 		position: 'relative',
 		borderStyle: 'solid',
 		transition: 'border-color .2s ease-out',
