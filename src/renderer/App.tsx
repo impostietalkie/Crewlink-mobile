@@ -41,7 +41,6 @@ import Typography from '@material-ui/core/Typography';
 import SupportLink from './SupportLink';
 import SelectColorMenu from './SelectColorMenu';
 import EnterRoomCodeMenu from './EnterRoomCodeMenu';
-import GameStateReader from '../main/GameReader';
 
 // let appVersion = '';
 // if (typeof window !== 'undefined' && window.location) {
@@ -231,7 +230,6 @@ const App: React.FC = function () {
 	const [isPushToTalkKeyDown, setIsPushToTalkKeyDown] = useState(false);
 	const [isMuted, setIsMuted] = useState(false);
 	const [isDeafened, setIsDeafened] = useState(false);
-	const [gameStateReader, ] = useState(new GameStateReader());
 
 	const toggleIsDeafened = () => setIsDeafened(!isDeafened);
 	const toggleIsMuted = () => setIsMuted(!isMuted);
@@ -344,13 +342,6 @@ const App: React.FC = function () {
 	} else {
 		page = <EnterRoomCodeMenu setRoomCode={setRoomCode}/>;
 	}
-
-	// Get Game State from web
-	const frame = () => {
-		gameStateReader.fetchStateFromServer();
-		setTimeout(frame, 1000 / 20);
-	};
-	frame();
 
 	return (
 		<GameStateContext.Provider value={gameState}>
