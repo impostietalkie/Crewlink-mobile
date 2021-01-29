@@ -888,7 +888,6 @@ const Voice: React.FC<VoiceProps> = function ({
 					<div className={classes.avatarWrapper}>
 						<Avatar
 							deafened={isDeafened}
-							muted={isMuted || !isPushToTalkKeyDown}
 							player={myPlayer}
 							borderColor="#2ecc71"
 							connectionState={connected ? 'connected' : 'disconnected'}
