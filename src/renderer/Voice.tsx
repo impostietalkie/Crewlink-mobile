@@ -23,8 +23,6 @@ import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import SupportLink from './SupportLink';
 import Divider from '@material-ui/core/Divider';
-// @ts-ignore
-import reverbOgx from 'arraybuffer-loader!../static/reverb.ogx';
 
 export interface ExtendedAudioElement extends HTMLAudioElement {
 	setSinkId: (sinkId: string) => Promise<void>;
@@ -301,18 +299,6 @@ const Voice: React.FC<VoiceProps> = function ({
 			delete audioElements.current[peer];
 		}
 	}
-
-	useEffect(() => {
-		(async () => {
-			try {
-				const context = new AudioContext();
-				convolverBuffer.current = await context.decodeAudioData(reverbOgx);
-				await context.close();
-			} catch (e) {
-				console.log('error', e);
-			}
-		})();
-	}, []);
 
 	// Handle pushToTalk, if set
 	useEffect(() => {
