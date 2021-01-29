@@ -529,8 +529,9 @@ const Voice: React.FC<VoiceProps> = function ({
 			setConnected(false);
 		});
 
-		socket.on('pullstate', (state: string) => {
-			setGameState(JSON.parse(state) as AmongUsState);
+		socket.on('pullstate', (state: string | AmongUsState) => {
+			const gameState = typeof state === 'string' ? JSON.parse(state) as AmongUsState : state;
+			setGameState(gameState);
 		})
 
 		// Initialize variables
