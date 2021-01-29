@@ -16,19 +16,18 @@ import {
 	SocketClientMap,
 } from '../common/AmongUsState';
 import Peer from 'simple-peer';
-import { ipcRenderer } from 'electron';
 import VAD from './vad';
 import { ILobbySettings, ISettings } from '../common/ISettings';
-import {
-	IpcRendererMessages,
-} from '../common/ipc-messages';
+// import {
+// 	IpcRendererMessages,
+// } from '../common/ipc-messages';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import SupportLink from './SupportLink';
 import Divider from '@material-ui/core/Divider';
 // @ts-ignore
-import reverbOgx from 'arraybuffer-loader!../../static/reverb.ogx';
+import reverbOgx from 'arraybuffer-loader!../static/reverb.ogx';
 
 export interface ExtendedAudioElement extends HTMLAudioElement {
 	setSinkId: (sinkId: string) => Promise<void>;
@@ -275,8 +274,8 @@ const Voice: React.FC<VoiceProps> = function ({
 	const classes = useStyles();
 	const convolverBuffer = useRef<AudioBuffer | null>(null);
 
-	const [deafenedState, setDeafened] = useState(false);
-	const [mutedState, setMuted] = useState(false);
+	const [deafenedState, ] = useState(false);
+	const [mutedState, ] = useState(false);
 	const [connected, setConnected] = useState(false);
 	function disconnectPeer(peer: string) {
 		const connection = peerConnections[peer];
@@ -430,33 +429,6 @@ const Voice: React.FC<VoiceProps> = function ({
 				connectionStuff.current.stream = stream;
 
 				stream.getAudioTracks()[0].enabled = !settings.pushToTalk;
-
-				ipcRenderer.on(IpcRendererMessages.TOGGLE_DEAFEN, () => {
-					connectionStuff.current.deafened = !connectionStuff.current.deafened;
-					stream.getAudioTracks()[0].enabled =
-						!connectionStuff.current.deafened && !connectionStuff.current.muted;
-					setDeafened(connectionStuff.current.deafened);
-				});
-				ipcRenderer.on(IpcRendererMessages.TOGGLE_MUTE, () => {
-					connectionStuff.current.muted = !connectionStuff.current.muted;
-					if (connectionStuff.current.deafened) {
-						connectionStuff.current.deafened = false;
-						connectionStuff.current.muted = false;
-					}
-					stream.getAudioTracks()[0].enabled =
-						!connectionStuff.current.muted && !connectionStuff.current.deafened;
-					setMuted(connectionStuff.current.muted);
-					setDeafened(connectionStuff.current.deafened);
-				});
-				ipcRenderer.on(
-					IpcRendererMessages.PUSH_TO_TALK,
-					(_: unknown, pressing: boolean) => {
-						if (!connectionStuff.current.pushToTalk) return;
-						if (!connectionStuff.current.deafened) {
-							stream.getAudioTracks()[0].enabled = pressing;
-						}
-					}
-				);
 
 				const ac = new AudioContext();
 				ac.createMediaStreamSource(stream);

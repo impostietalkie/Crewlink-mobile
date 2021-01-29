@@ -1,3 +1,5 @@
+/* eslint react/prop-types: 0 */
+
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
@@ -5,7 +7,7 @@ import Avatar from './Avatar';
 import { Player } from '../common/AmongUsState';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	otherplayers: {
 		width: 225,
 		height: 225,

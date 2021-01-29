@@ -1,5 +1,3 @@
-import { ProgressInfo } from 'builder-util-runtime';
-
 // Renderer --> Main (send/on)
 export enum IpcMessages {
 	SHOW_ERROR_DIALOG = 'SHOW_ERROR_DIALOG',
@@ -31,5 +29,5 @@ export enum IpcRendererMessages {
 export interface AutoUpdaterState {
 	state: 'error' | 'available' | 'downloading' | 'downloaded' | 'unavailable';
 	error?: string;
-	progress?: ProgressInfo;
+	//progress?: ProgressInfo;
 }

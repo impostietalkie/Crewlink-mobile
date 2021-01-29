@@ -5,7 +5,6 @@ import {
 } from '../common/AmongUsState';
 
 export default class GameReader {
-	sendIPC: Electron.WebContents['send'];
 	PlayerStruct: Struct | undefined;
 
 	menuUpdateTimer = 20;
@@ -23,9 +22,5 @@ export default class GameReader {
 		//this.oldGameState = state;
 		// TODO this
 		return null;
-	}
-
-	constructor(sendIPC: Electron.WebContents['send']) {
-		this.sendIPC = sendIPC;
 	}
 }

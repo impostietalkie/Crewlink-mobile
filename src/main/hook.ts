@@ -1,13 +1,13 @@
-import { ipcMain } from 'electron';
 import GameStateReader from './GameReader';
+/**
 import iohook from 'iohook';
-import Store from 'electron-store';
 import { ISettings } from '../common/ISettings';
 import {
 	IpcHandlerMessages,
 	IpcRendererMessages,
 	IpcSyncMessages,
 } from '../common/ipc-messages';
+*/
 
 interface IOHookEvent {
 	type: string;
@@ -20,11 +20,12 @@ interface IOHookEvent {
 	y?: number;
 }
 
-const store = new Store<ISettings>();
-
 let readingGame = false;
 let gameStateReader: GameStateReader;
 
+//TODO: Move store over to some local storage
+/**
+const store = new Store<ISettings>();
 ipcMain.on(IpcSyncMessages.GET_INITIAL_STATE, (event) => {
 	if (!readingGame) {
 		console.error(
@@ -128,6 +129,7 @@ ipcMain.handle(IpcHandlerMessages.START_HOOK, async (event) => {
 		frame();
 	}
 });
+*/
 
 const keycodeMap = {
 	Space: 57,
