@@ -775,7 +775,7 @@ const Voice: React.FC<VoiceProps> = function ({
 			!myPlayer
 		)
 			return [];
-		else otherPlayers = gameState.players.filter((p) => !p.isLocal);
+		else otherPlayers = gameState.players.filter((p) => p.name !== player.name);
 
 		const playerSocketIds: {
 			[index: number]: string;
