@@ -3,13 +3,11 @@ import React, {
 	ErrorInfo,
 	ReactChild,
 	SetStateAction,
-	useEffect,
 	useReducer,
 	useState,
 } from 'react';
 import ReactDOM from 'react-dom';
 import Voice from './Voice';
-import { ipcRenderer } from 'electron';
 import { AmongUsState, Player } from '../common/AmongUsState';
 import Settings, {
 	settingsReducer,
@@ -21,37 +19,34 @@ import {
 	LobbySettingsContext,
 } from './contexts';
 import { ThemeProvider } from '@material-ui/core/styles';
-import {
-	AutoUpdaterState,
-	IpcHandlerMessages,
-	IpcMessages,
-	IpcRendererMessages,
-	IpcSyncMessages,
-} from '../common/ipc-messages';
+// import {
+// 	AutoUpdaterState,
+// 	IpcHandlerMessages,
+// 	IpcRendererMessages,
+// 	IpcSyncMessages,
+// } from '../common/ipc-messages';
 import theme from './theme';
 import SettingsIcon from '@material-ui/icons/Settings';
-import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
+// import Dialog from '@material-ui/core/Dialog';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
+// import LinearProgress from '@material-ui/core/LinearProgress';
+// import DialogTitle from '@material-ui/core/DialogTitle';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
-import prettyBytes from 'pretty-bytes';
+// import prettyBytes from 'pretty-bytes';
 import './css/index.css';
 import Typography from '@material-ui/core/Typography';
 import SupportLink from './SupportLink';
 import SelectColorMenu from './SelectColorMenu';
 import EnterRoomCodeMenu from './EnterRoomCodeMenu';
 
-let appVersion = '';
-if (typeof window !== 'undefined' && window.location) {
-	const query = new URLSearchParams(window.location.search.substring(1));
-	appVersion = ' v' + query.get('version') || '';
-}
+// let appVersion = '';
+// if (typeof window !== 'undefined' && window.location) {
+// 	const query = new URLSearchParams(window.location.search.substring(1));
+// 	appVersion = ' v' + query.get('version') || '';
+// }
 
 const useStyles = makeStyles(() => ({
 	root: {
@@ -91,7 +86,7 @@ const TitleBar: React.FC<TitleBarProps> = function ({
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
-			<span className={classes.title}>CrewLink{appVersion}</span>
+			<span className={classes.title}>CrewLink</span>
 			<IconButton
 				className={classes.button}
 				style={{ left: 0 }}
@@ -100,22 +95,14 @@ const TitleBar: React.FC<TitleBarProps> = function ({
 			>
 				<SettingsIcon htmlColor="#777" />
 			</IconButton>
-			<IconButton
-				className={classes.button}
-				style={{ right: 0 }}
-				size="small"
-				onClick={() => ipcRenderer.send(IpcMessages.QUIT_CREWLINK)}
-			>
-				<CloseIcon htmlColor="#777" />
-			</IconButton>
 		</div>
 	);
 };
 
-enum AppState {
-	MENU,
-	VOICE,
-}
+// enum AppState {
+// 	MENU,
+// 	VOICE,
+// }
 
 interface ErrorBoundaryProps {
 	children: ReactChild;
@@ -178,13 +165,13 @@ class ErrorBoundary extends React.Component<
 }
 
 const App: React.FC = function () {
-	const [, setState] = useState<AppState>(AppState.MENU);
-	const [gameState, setGameState] = useState<AmongUsState>({} as AmongUsState);
+	// const [, setState] = useState<AppState>(AppState.MENU);
+	const [gameState, ] = useState<AmongUsState>({} as AmongUsState);
 	const [settingsOpen, setSettingsOpen] = useState(false);
-	const [error, setError] = useState('');
-	const [updaterState, setUpdaterState] = useState<AutoUpdaterState>({
-		state: 'unavailable',
-	});
+	const [error, ] = useState('');
+	// const [updaterState, setUpdaterState] = useState<AutoUpdaterState>({
+	// 	state: 'unavailable',
+	// });
 	const [roomCode, setRoomCode] = useState<string>('');
 	const [player, setPlayer] = useState<Player | undefined>(undefined);
 
@@ -211,56 +198,6 @@ const App: React.FC = function () {
 		settings[0].localLobbySettings
 	);
 
-	useEffect(() => {
-		const onOpen = (_: Electron.IpcRendererEvent, isOpen: boolean) => {
-			setState(isOpen ? AppState.VOICE : AppState.MENU);
-		};
-		const onState = (_: Electron.IpcRendererEvent, newState: AmongUsState) => {
-			setGameState(newState);
-		};
-		const onError = (_: Electron.IpcRendererEvent, error: string) => {
-			shouldInit = false;
-			setError(error);
-		};
-		const onAutoUpdaterStateChange = (
-			_: Electron.IpcRendererEvent,
-			state: AutoUpdaterState
-		) => {
-			setUpdaterState((old) => ({ ...old, ...state }));
-		};
-		let shouldInit = true;
-		ipcRenderer
-			.invoke(IpcHandlerMessages.START_HOOK)
-			.then(() => {
-				if (shouldInit) {
-					setGameState(ipcRenderer.sendSync(IpcSyncMessages.GET_INITIAL_STATE));
-				}
-			})
-			.catch((error: Error) => {
-				if (shouldInit) {
-					shouldInit = false;
-					setError(error.message);
-				}
-			});
-		ipcRenderer.on(
-			IpcRendererMessages.AUTO_UPDATER_STATE,
-			onAutoUpdaterStateChange
-		);
-		ipcRenderer.on(IpcRendererMessages.NOTIFY_GAME_OPENED, onOpen);
-		ipcRenderer.on(IpcRendererMessages.NOTIFY_GAME_STATE_CHANGED, onState);
-		ipcRenderer.on(IpcRendererMessages.ERROR, onError);
-		return () => {
-			ipcRenderer.off(
-				IpcRendererMessages.AUTO_UPDATER_STATE,
-				onAutoUpdaterStateChange
-			);
-			ipcRenderer.off(IpcRendererMessages.NOTIFY_GAME_OPENED, onOpen);
-			ipcRenderer.off(IpcRendererMessages.NOTIFY_GAME_STATE_CHANGED, onState);
-			ipcRenderer.off(IpcRendererMessages.ERROR, onError);
-			shouldInit = false;
-		};
-	}, []);
-
 	let page;
 	if (player) {
 		page = <Voice error={error} />;
@@ -285,7 +222,7 @@ const App: React.FC = function () {
 									open={settingsOpen}
 									onClose={() => setSettingsOpen(false)}
 								/>
-								<Dialog fullWidth open={updaterState.state !== 'unavailable'}>
+								{/* <Dialog fullWidth open={updaterState.state !== 'unavailable'}>
 									<DialogTitle>Updating...</DialogTitle>
 									<DialogContent>
 										{(updaterState.state === 'downloading' ||
@@ -312,7 +249,7 @@ const App: React.FC = function () {
 											</DialogContentText>
 										)}
 									</DialogContent>
-								</Dialog>
+								</Dialog> */}
 								{page}
 							</>
 						</ErrorBoundary>
@@ -323,4 +260,4 @@ const App: React.FC = function () {
 	);
 };
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('root'));

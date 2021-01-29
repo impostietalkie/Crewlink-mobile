@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
@@ -34,9 +33,7 @@ const Footer: React.FC = function () {
 					width={36}
 					height={36}
 					viewBox="0 0 24 24"
-					onClick={() => {
-						shell.openExternal('https://github.com/ottomated/crewlink');
-					}}
+					href="https://github.com/ottomated/crewlink"
 				>
 					<path
 						fill="currentColor"

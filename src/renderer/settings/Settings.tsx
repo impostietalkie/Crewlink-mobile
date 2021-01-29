@@ -1,4 +1,3 @@
-import Store from 'electron-store';
 import React, {
 	ReactChild,
 	useContext,
@@ -132,6 +131,7 @@ const keys = new Set([
 	'RAlt',
 ]);
 
+/**
 const storeConfig: Store.Options<ISettings> = {
 	migrations: {
 		'1.1.3': (store) => {
@@ -245,6 +245,7 @@ const storeConfig: Store.Options<ISettings> = {
 };
 
 const store = new Store<ISettings>(storeConfig);
+*/
 
 export interface SettingsProps {
 	open: boolean;
@@ -270,7 +271,7 @@ export const settingsReducer = (
 		v[0] = 'localLobbySettings';
 		v[1] = lobbySettings;
 	}
-	store.set(v[0], v[1]);
+	// store.set(v[0], v[1]);
 	return {
 		...state,
 		[v[0]]: v[1],
@@ -433,6 +434,7 @@ const Settings: React.FC<SettingsProps> = function ({
 	const [lobbySettings, setLobbySettings] = useContext(LobbySettingsContext);
 	const [unsavedCount, setUnsavedCount] = useState(0);
 	const unsaved = unsavedCount > 2;
+	/**
 	useEffect(() => {
 		setSettings({
 			type: 'set',
@@ -443,6 +445,7 @@ const Settings: React.FC<SettingsProps> = function ({
 			action: store.get('localLobbySettings'),
 		});
 	}, []);
+	*/
 
 	useEffect(() => {
 		setUnsavedCount((s) => s + 1);
