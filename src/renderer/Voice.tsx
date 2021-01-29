@@ -427,8 +427,8 @@ const Voice: React.FC<VoiceProps> = function ({
 			setConnected(false);
 		});
 
-		socket.on('pullstate', (state: AmongUsState) => {
-			setGameState(state);
+		socket.on('pullstate', (state: string) => {
+			setGameState(JSON.parse(state) as AmongUsState);
 		})
 
 		// Initialize variables
@@ -662,7 +662,7 @@ const Voice: React.FC<VoiceProps> = function ({
 		} else {
 			return gameState.players.find((p) => p.name === player.name); // TODO this might not be the best way to check the player
 		}
-	}, [gameState.players, player]);
+	}, [gameState, player]);
 
 	const otherPlayers = useMemo(() => {
 		let otherPlayers: Player[];
@@ -766,6 +766,7 @@ const Voice: React.FC<VoiceProps> = function ({
 			playerSocketIds[socketClients[k].playerId] = k;
 	}
 
+	console.log('myPlayer', myPlayer);
 	return (
 		<div className={classes.root}>
 			{error && (
