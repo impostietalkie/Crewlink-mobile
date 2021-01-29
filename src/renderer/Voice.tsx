@@ -18,9 +18,6 @@ import {
 import Peer from 'simple-peer';
 import VAD from './vad';
 import { ILobbySettings, ISettings } from '../common/ISettings';
-// import {
-// 	IpcRendererMessages,
-// } from '../common/ipc-messages';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -189,6 +186,9 @@ function calculateVoiceAudio(
 export interface VoiceProps {
 	error: string;
 	player: Player;
+	isPushToTalkKeyDown: boolean;
+	isDeafened: boolean;
+	isMuted: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -246,6 +246,9 @@ const useStyles = makeStyles((theme) => ({
 const Voice: React.FC<VoiceProps> = function ({
 	error: initialError,
 	player,
+	isPushToTalkKeyDown,
+	isDeafened,
+	isMuted,
 }: VoiceProps) {
 	const [error, setError] = useState(initialError);
 	const [settings, setSettings] = useContext(SettingsContext);
@@ -271,8 +274,6 @@ const Voice: React.FC<VoiceProps> = function ({
 	const classes = useStyles();
 	const convolverBuffer = useRef<AudioBuffer | null>(null);
 
-	const [deafenedState, ] = useState(false);
-	const [mutedState, ] = useState(false);
 	const [connected, setConnected] = useState(false);
 	function disconnectPeer(peer: string) {
 		const connection = peerConnections[peer];
@@ -384,6 +385,33 @@ const Voice: React.FC<VoiceProps> = function ({
 		deafened: false,
 		muted: false,
 	});
+
+	// TODO test
+	useEffect(() => {
+		connectionStuff.current.muted = isMuted;
+		if (connectionStuff.current.deafened) {
+			connectionStuff.current.deafened = false;
+			connectionStuff.current.muted = false;
+		}
+		if (connectionStuff.current.stream) connectionStuff.current.stream.getAudioTracks()[0].enabled =
+			!connectionStuff.current.muted && !connectionStuff.current.deafened;
+	}, [isMuted]);
+
+	// TODO test
+	useEffect(() => {
+		connectionStuff.current.deafened = isDeafened;
+		if (connectionStuff.current.stream) connectionStuff.current.stream.getAudioTracks()[0].enabled =
+		!connectionStuff.current.muted && !connectionStuff.current.deafened;
+	}, [isDeafened]);
+
+	// TODO test
+	useEffect(() => {
+		if (!connectionStuff.current.pushToTalk) return;
+		if (!connectionStuff.current.deafened) {
+			if (connectionStuff.current.stream) connectionStuff.current.stream.getAudioTracks()[0].enabled =
+			isPushToTalkKeyDown;
+		}
+	}, [isPushToTalkKeyDown]);
 
 	useEffect(() => {
 		let currentLobby = '';
@@ -616,10 +644,6 @@ const Voice: React.FC<VoiceProps> = function ({
 			(error) => {
 				console.error(error);
 				setError("Couldn't connect to your microphone:\n" + error);
-				// ipcRenderer.send(IpcMessages.SHOW_ERROR_DIALOG, {
-				// 	title: 'Error',
-				// 	content: 'Couldn\'t connect to your microphone:\n' + error
-				// });
 			}
 		);
 
@@ -760,8 +784,8 @@ const Voice: React.FC<VoiceProps> = function ({
 				{myPlayer && (
 					<div className={classes.avatarWrapper}>
 						<Avatar
-							deafened={deafenedState}
-							muted={mutedState}
+							deafened={isDeafened}
+							muted={isMuted || !isPushToTalkKeyDown}
 							player={myPlayer}
 							borderColor="#2ecc71"
 							connectionState={connected ? 'connected' : 'disconnected'}

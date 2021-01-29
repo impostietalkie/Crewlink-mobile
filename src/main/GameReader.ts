@@ -17,10 +17,10 @@ export default class GameReader {
 
 	gameCode = 'MENU';
 
-	fetchStateFromServer() {
+	fetchStateFromServer(): void {
 		//this.lastState = newState;
 		//this.oldGameState = state;
 		// TODO this
-		return null;
+		return;
 	}
 }
