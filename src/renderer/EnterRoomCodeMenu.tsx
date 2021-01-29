@@ -1,8 +1,14 @@
 /* eslint react/prop-types: 0 */
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { SettingsContext } from './contexts';
+import axios from 'axios';
+
+interface HasRoomCodeResponse {
+	isValid: boolean;
+}
 
 interface IOwnProps {
 	setRoomCode: (roomCode: string) => void;
@@ -12,14 +18,24 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 	setRoomCode,
 }) {
 	const [roomCodeTmp, setRoomCodeTmp] = useState('');
-	const hasInputError = false;
+	const [settings, ] = useContext(SettingsContext);
+	const [hasInputError, setHasInputError] = useState(false);
 
 	const onSubmit = () => {
 		if (roomCodeTmp.length !== 6) {
 			return;
 		}
-		// TODO do the error checking
-		setRoomCode(roomCodeTmp);
+
+		// Check if the code exists
+		const res = axios.get(`${settings.serverURL}hasRoomCode?roomCode=${roomCodeTmp}`);
+		res.then((res) => {
+			const hasRoomCodeResponse = res.data as HasRoomCodeResponse;
+			if (hasRoomCodeResponse.isValid) {
+				setRoomCode(roomCodeTmp);
+			} else {
+				setHasInputError(true);
+			}
+		})
 	};
 
 	return (
@@ -33,7 +49,12 @@ const EnterRoomCodeMenu: React.FC<IOwnProps> = function ({
 				variant="outlined"
 				color="primary"
 				helperText={hasInputError ? 'Room not found' : ''}
-				onKeyDown={(e) => e.key === 'Enter' && onSubmit()}
+				onKeyDown={(e) => {
+					setHasInputError(false);
+					if (e.key === 'Enter') {
+						onSubmit();
+					}
+				}}
 			/>
 			<Button
 				color="primary"
