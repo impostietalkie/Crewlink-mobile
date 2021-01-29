@@ -22,6 +22,8 @@ interface IOHookEvent {
 
 let readingGame = false;
 let gameStateReader: GameStateReader;
+
+//TODO: Move store over to some local storage
 /**
 const store = new Store<ISettings>();
 ipcMain.on(IpcSyncMessages.GET_INITIAL_STATE, (event) => {

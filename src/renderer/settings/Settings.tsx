@@ -131,6 +131,7 @@ const keys = new Set([
 	'RAlt',
 ]);
 
+//TODO: Move store over to some local storage
 /**
 const storeConfig: Store.Options<ISettings> = {
 	migrations: {
