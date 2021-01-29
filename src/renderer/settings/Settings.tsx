@@ -36,6 +36,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import { GameState } from '../../common/AmongUsState';
 import Button from '@material-ui/core/Button';
+import Cookies from 'universal-cookie';
 
 interface StyleInput {
 	open: boolean;
@@ -136,6 +137,17 @@ export interface SettingsProps {
 	onClose: () => void;
 }
 
+const saveSingleSettings = (key: string, val: unknown) => {
+	const cookies = new Cookies();
+	cookies.set(key, val, { path: '/' });
+}
+
+const saveSettings = (settings: ISettings) => {
+	Object.entries(settings).forEach((item) => {
+		saveSingleSettings(item[0], item[1]);
+	})
+}
+
 export const settingsReducer = (
 	state: ISettings,
 	action: {
@@ -144,6 +156,7 @@ export const settingsReducer = (
 	}
 ): ISettings => {
 	if (action.type === 'set') {
+		saveSettings(action.action as ISettings);
 		return action.action as ISettings;
 	}
 	const v = action.action as [string, unknown];
@@ -155,7 +168,8 @@ export const settingsReducer = (
 		v[0] = 'localLobbySettings';
 		v[1] = lobbySettings;
 	}
-	// store.set(v[0], v[1]);
+
+	saveSingleSettings(v[0], v[1]);
 	return {
 		...state,
 		[v[0]]: v[1],
