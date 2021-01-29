@@ -260,7 +260,7 @@ function calculateVoiceAudio(
 	const wallIntersection = mapWalls.walls.find((wall) => {
 		intersect(wall, me, other);
 	});
-	if(!!wallIntersection) {
+	if(wallIntersection) {
 		gain.gain.value = 0;
 	}
 
