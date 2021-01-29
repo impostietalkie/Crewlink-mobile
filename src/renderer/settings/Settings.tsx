@@ -245,7 +245,7 @@ const URLInput: React.FC<URLInputProps> = function ({
 					/>
 					<Alert severity="error">
 						This option is for advanced users only. Other servers can steal your
-						info or crash CrewLink.
+						info or crash ImpostieTalkie.
 					</Alert>
 					<Button
 						color="primary"
