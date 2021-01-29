@@ -200,7 +200,7 @@ const App: React.FC = function () {
 
 	let page;
 	if (player) {
-		page = <Voice error={error} />;
+		page = <Voice error={error} player={player}/>;
 	} else if (roomCode) {
 		page = <SelectColorMenu setPlayer={setPlayer}/>;
 	} else {

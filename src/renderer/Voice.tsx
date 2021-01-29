@@ -188,6 +188,7 @@ function calculateVoiceAudio(
 
 export interface VoiceProps {
 	error: string;
+	player: Player;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -249,6 +250,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Voice: React.FC<VoiceProps> = function ({
 	error: initialError,
+	player,
 }: VoiceProps) {
 	const [error, setError] = useState(initialError);
 	const [settings, setSettings] = useContext(SettingsContext);
@@ -640,9 +642,9 @@ const Voice: React.FC<VoiceProps> = function ({
 		if (!gameState || !gameState.players) {
 			return undefined;
 		} else {
-			return gameState.players.find((p) => p.isLocal);
+			return gameState.players.find((p) => p.name === player.name); // TODO this might not be the best way to check the player
 		}
-	}, [gameState.players]);
+	}, [gameState.players, player]);
 
 	const otherPlayers = useMemo(() => {
 		let otherPlayers: Player[];
