@@ -41,6 +41,7 @@ import Typography from '@material-ui/core/Typography';
 import SupportLink from './SupportLink';
 import SelectColorMenu from './SelectColorMenu';
 import EnterRoomCodeMenu from './EnterRoomCodeMenu';
+import Cookies from 'universal-cookie';
 
 // let appVersion = '';
 // if (typeof window !== 'undefined' && window.location) {
@@ -234,23 +235,28 @@ const App: React.FC = function () {
 	const toggleIsDeafened = () => setIsDeafened(!isDeafened);
 	const toggleIsMuted = () => setIsMuted(!isMuted);
 
+	const getCookieSettingWithDefault = (name: string, defaultVal: unknown) => {
+		const cookies = new Cookies();
+		return cookies.get(name) ?? defaultVal;
+	}
+
 	const settings = useReducer(settingsReducer, {
-		alwaysOnTop: false,
-		microphone: 'Default',
-		speaker: 'Default',
-		pushToTalk: false,
-		serverURL: 'https://impostietalkie.herokuapp.com/',
-		pushToTalkShortcut: 'V',
-		deafenShortcut: 'RControl',
-		muteShortcut: 'RAlt',
-		hideCode: false,
-		enableSpatialAudio: true,
-		localLobbySettings: {
+		alwaysOnTop: getCookieSettingWithDefault('alwaysOnTop', false),
+		microphone: getCookieSettingWithDefault('microphone', 'Default'),
+		speaker: getCookieSettingWithDefault('speaker', 'Default'),
+		pushToTalk: getCookieSettingWithDefault('pushToTalk', false),
+		serverURL: getCookieSettingWithDefault('serverURL', 'https://impostietalkie.herokuapp.com/'),
+		pushToTalkShortcut: getCookieSettingWithDefault('pushToTalkShortcut', 'V'),
+		deafenShortcut: getCookieSettingWithDefault('deafenShortcut', 'RControl'),
+		muteShortcut: getCookieSettingWithDefault('muteShortcut', 'RAlt'),
+		hideCode: getCookieSettingWithDefault('hideCode', false),
+		enableSpatialAudio: getCookieSettingWithDefault('enableSpatialAudio', true),
+		localLobbySettings: getCookieSettingWithDefault('localLobbySettings', {
 			maxDistance: 5.32,
 			haunting: false,
 			hearImpostorsInVents: false,
 			commsSabotage: true,
-		},
+		}),
 	});
 	const lobbySettings = useReducer(
 		lobbySettingsReducer,
