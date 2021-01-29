@@ -820,7 +820,7 @@ const Voice: React.FC<VoiceProps> = function ({
 			(gameState.oldGameState === GameState.DISCUSSION ||
 				gameState.oldGameState === GameState.TASKS)
 		) {
-			connect.connect(gameState.lobbyCode, myPlayer.id, gameState.clientId);
+			connect.connect(gameState.lobbyCode, myPlayer.id, myPlayer.clientId);
 		} else if (
 			gameState.oldGameState !== GameState.UNKNOWN &&
 			gameState.oldGameState !== GameState.MENU &&
@@ -854,7 +854,7 @@ const Voice: React.FC<VoiceProps> = function ({
 			connectionStuff.current.socket.emit(
 				'id',
 				myPlayer.id,
-				gameState.clientId
+				myPlayer.clientId
 			);
 		}
 	}, [myPlayer?.id]);
