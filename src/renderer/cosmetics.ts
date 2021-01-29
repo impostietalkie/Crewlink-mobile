@@ -191,6 +191,11 @@ export const skins = [
 	skin14,
 	skin15,
 ];
+
+export const hatXOffsets: Record<string, string> = {
+	'41': '40%'
+}
+
 export const hatOffsets = [
 	45,
 	25,

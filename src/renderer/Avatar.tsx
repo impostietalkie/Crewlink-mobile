@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Player } from '../common/AmongUsState';
-import { backLayerHats, hatOffsets, hats, skins, players } from './cosmetics';
+import { backLayerHats, hatOffsets, hats, skins, players, hatXOffsets } from './cosmetics';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MicOff from '@material-ui/icons/MicOff';
 import VolumeOff from '@material-ui/icons/VolumeOff';
@@ -135,7 +135,6 @@ const useCanvasStyles = makeStyles(() => ({
 	},
 	hat: {
 		position: 'absolute',
-		left: '50%',
 		transform: 'translateX(calc(-50% + 4px)) scale(0.7)',
 		zIndex: ({ backLayerHat }: UseCanvasStylesParams) => (backLayerHat ? 1 : 4),
 		display: ({ isAlive }: UseCanvasStylesParams) =>
@@ -170,7 +169,7 @@ function Canvas({ src, hat, skin, isAlive }: CanvasProps) {
 				src={hats[hat]}
 				ref={hatImg}
 				className={classes.hat}
-				style={{ top: `${hatY}%` }}
+				style={{ top: `${hatY}%`, left: hatXOffsets[hat.toString()] ?? '50%' }}
 			/>
 			<img src={skins[skin]} ref={skinImg} className={classes.skin} />
 		</>
