@@ -49,9 +49,7 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 	useEffect(() => {
 		const interval = setInterval(() => {
 			axios.get(`${settings.serverURL}gameState?roomCode=${roomCode}`).then((res) => {
-				console.log(res.data);
 				const players = (res.data as AmongUsStateResponse).gameState.players;
-				console.log(players);
 				setOtherPlayers(players);
 			})
 		}, 1000);
