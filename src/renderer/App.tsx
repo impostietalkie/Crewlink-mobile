@@ -340,7 +340,7 @@ const App: React.FC = function () {
 			<Voice error={error} player={player} isPushToTalkKeyDown={isPushToTalkKeyDown} isDeafened={isDeafened} isMuted={isMuted}/>
 		);
 	} else if (roomCode) {
-		page = <SelectColorMenu setPlayer={setPlayer}/>;
+		page = <SelectColorMenu setPlayer={setPlayer} roomCode={roomCode}/>;
 	} else {
 		page = <EnterRoomCodeMenu setRoomCode={setRoomCode}/>;
 	}

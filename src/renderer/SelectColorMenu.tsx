@@ -1,11 +1,13 @@
 /* eslint react/prop-types: 0 */
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
 import Avatar from './Avatar';
-import { Player } from '../common/AmongUsState';
+import { AmongUsState, Player } from '../common/AmongUsState';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import axios from 'axios';
+import { SettingsContext } from './contexts';
 
 const useStyles = makeStyles(() => ({
 	otherplayers: {
@@ -27,149 +29,34 @@ const useStyles = makeStyles(() => ({
 	},
 }));
 
+interface AmongUsStateResponse {
+	gameState: AmongUsState;
+}
+
 interface IOwnProps {
 	setPlayer: (player: Player) => void;
+	roomCode: string;
 }
 
 const SelectColorMenu: React.FC<IOwnProps> = function ({
 	setPlayer,
+	roomCode,
 }) {
 	const classes = useStyles();
-	const otherPlayers: Player[] = [{
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'Carter',
-		colorId: 1,
-		hatId: 1,
-		petId: 1,
-		skinId: 1,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	}, {
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'Mikey',
-		colorId: 2,
-		hatId: 2,
-		petId: 2,
-		skinId: 2,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	}, {
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'Tommy',
-		colorId: 3,
-		hatId: 3,
-		petId: 3,
-		skinId: 3,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	},
-	{
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'Lizzy',
-		colorId: 4,
-		hatId: 4,
-		petId: 4,
-		skinId: 4,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	},{
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'Benj',
-		colorId: 5,
-		hatId: 5,
-		petId: 5,
-		skinId: 5,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	},{
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'KT',
-		colorId: 6,
-		hatId: 6,
-		petId: 6,
-		skinId: 6,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	},{
-		ptr: 1,
-		id: 1,
-		clientId: 1,
-		name: 'David',
-		colorId: 7,
-		hatId: 7,
-		petId: 7,
-		skinId: 7,
-		disconnected: false,
-		isImpostor: false,
-		isDead: false,
-		taskPtr: 1,
-		objectPtr: 1,
-		isLocal: false,
-	
-		x: 1,
-		y: 1,
-		inVent: false,
-	}]; // TODO get this somehow
+	const [otherPlayers, setOtherPlayers] = useState<Player[]>([]);
+	const [settings, ] = useContext(SettingsContext);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			axios.get(`${settings.serverURL}gameState?roomCode=${roomCode}`).then((res) => {
+				console.log(res.data);
+				const players = (res.data as AmongUsStateResponse).gameState.players;
+				console.log(players);
+				setOtherPlayers(players);
+			})
+		}, 1000);
+		return () => clearInterval(interval);
+	}, [roomCode]);
 	
 	return (
 		<Grid
