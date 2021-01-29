@@ -13,7 +13,7 @@ import {
 	GameState,
 	OtherTalking,
 	Player,
-	SocketClientMap,
+	SocketClientMap
 } from '../common/AmongUsState';
 import Peer from 'simple-peer';
 import VAD from './vad';
@@ -70,6 +70,84 @@ interface SocketError {
 	message?: string;
 }
 
+export interface Wall {
+	x1: number,
+	y1: number,
+	x2: number,
+	y2: number,
+}
+
+export interface Point {
+	x: number,
+	y: number,
+}
+
+const MIRA_HQ_WALLS: Wall[] = [
+	{
+		x1: 17.5,
+		y1: -5,
+		x2: 17.5,
+		y2: 6.2,
+	},
+	{
+		x1: 7.558,
+		y1: 3.206,
+		x2: 7.558,
+		y2: 9.148,
+	},
+	{
+		x1: 7.558,
+		y1: 9.148,
+		x2: 12.432,
+		y2: 9.148,
+	},
+	{
+		x1: 12.432,
+		y1: 9.148,
+		x2: 12.432,
+		y2: 15.773,
+	},
+	{
+		x1: 12.432,
+		y1: 15.773,
+		x2: 5.058,
+		y2: 15.773,
+	},
+];
+
+const POLUS_WALLS: Wall[] = [
+	{
+		x1: 25.967,
+		y1: -23.244,
+		x2: 26.6,
+		y2: -23.244,
+	},
+	{
+		x1: 26.6,
+		y1: -23.244,
+		x2: 26.6,
+		y2: -19.24,
+	},
+	{
+		x1: 26.6,
+		y1: -19.24,
+		x2: 33.5,
+		y2: -19.24,
+	},
+];
+
+function ccw(A: Point, B: Point, C: Point) {
+	return (C.y-A.y) * (B.x-A.x) > (B.y-A.y) * (C.x-A.x)
+}
+
+function intersect(wall: Wall, me: Player, other: Player) {
+	const A: Point = {x: wall.x1, y: wall.y1};
+	const B: Point = {x: wall.x2, y: wall.y2};
+	const C: Point = {x: me.x, y: me.y};
+	const D: Point = {x: other.x, y: other.y};
+	return ccw(A,C,D) !== ccw(B,C,D) && ccw(A,B,C) !== ccw(A,B,D)
+}
+
 function calculateVoiceAudio(
 	state: AmongUsState,
 	settings: ISettings,
@@ -81,6 +159,21 @@ function calculateVoiceAudio(
 	const { pan, gain, muffle, reverbGain } = audio;
 	const audioContext = pan.context;
 	let panPos = [other.x - me.x, other.y - me.y];
+
+	const hardWalls = {
+		0: {
+			walls: [],
+		},
+		1: {
+			walls: MIRA_HQ_WALLS,
+		},
+		2: {
+			walls: POLUS_WALLS,
+		},
+		3: {
+			walls: [],
+		},
+	};
 
 	reverbGain.gain.value = 0;
 
@@ -161,6 +254,15 @@ function calculateVoiceAudio(
 
 	panPos[0] = Math.min(Math.max(panPos[0], -999), 999);
 	panPos[1] = Math.min(Math.max(panPos[1], -999), 999);
+
+	// Mute players if there is a hard wall between them
+	const mapWalls = hardWalls[state.map];
+	const wallIntersection = mapWalls.walls.find((wall) => {
+		intersect(wall, me, other);
+	});
+	if(!!wallIntersection) {
+		gain.gain.value = 0;
+	}
 
 	// Mute players if distance between two players is too big
 	if (
