@@ -241,7 +241,7 @@ const App: React.FC = function () {
 		microphone: 'Default',
 		speaker: 'Default',
 		pushToTalk: false,
-		serverURL: 'http://impostietalkie.herokuapp.com/',
+		serverURL: 'https://impostietalkie.herokuapp.com/',
 		pushToTalkShortcut: 'V',
 		deafenShortcut: 'RControl',
 		muteShortcut: 'RAlt',

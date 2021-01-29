@@ -253,7 +253,7 @@ const URLInput: React.FC<URLInputProps> = function ({
 						onClick={() => {
 							setOpen(false);
 							setURLValid(true);
-							onValidURL('http://impostietalkie.herokuapp.com/');
+							onValidURL('https://impostietalkie.herokuapp.com/');
 						}}
 					>
 						Reset to default
