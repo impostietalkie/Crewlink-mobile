@@ -25,6 +25,7 @@ import SupportLink from './SupportLink';
 import Divider from '@material-ui/core/Divider';
 import { Button } from '@material-ui/core';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 export interface ExtendedAudioElement extends HTMLAudioElement {
 	setSinkId: (sinkId: string) => Promise<void>;
@@ -962,7 +963,9 @@ const Voice: React.FC<VoiceProps> = function ({
 					onClick={() => {
 						clearCookie('selectedPlayer');
 						clearCookie('selectedRoomCode');
-						document.location.reload();
+						axios.delete(`${settings.serverURL}selectedPlayer?roomCode=${roomCode}&playerName=${player.name}`).then(() => {
+							document.location.reload();
+						});
 					}}
 				>Leave Lobby</Button>
 			</div>

@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
 import Avatar from './Avatar';
-import { AmongUsState, Player } from '../common/AmongUsState';
+import { Player } from '../common/AmongUsState';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { SettingsContext } from './contexts';
@@ -30,8 +30,8 @@ const useStyles = makeStyles(() => ({
 	},
 }));
 
-interface AmongUsStateResponse {
-	gameState: AmongUsState;
+interface AvailablePlayersResponse {
+	players: Player[];
 }
 
 interface IOwnProps {
@@ -49,8 +49,8 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			axios.get(`${settings.serverURL}gameState?roomCode=${roomCode}`).then((res) => {
-				const players = (res.data as AmongUsStateResponse).gameState.players;
+			axios.get(`${settings.serverURL}availablePlayers?roomCode=${roomCode}`).then((res) => {
+				const players = (res.data as AvailablePlayersResponse).players;
 				setOtherPlayers(players);
 			})
 		}, 1000);
@@ -62,6 +62,7 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 		const cookies = new Cookies();
 		cookies.set('selectedPlayer', player, { path: '/' });
 		cookies.set('selectedRoomCode', roomCode, { path: '/' });
+		axios.put(`${settings.serverURL}selectedPlayer?roomCode=${roomCode}&playerName=${player.name}`)
 	}
 
 	return (
