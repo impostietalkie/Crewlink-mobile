@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { SettingsContext } from './contexts';
 import Cookies from 'universal-cookie';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
 	otherplayers: {
@@ -67,38 +68,44 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 	}
 
 	return (
-		<Grid
-			container
-			spacing={1}
-			className={classes.otherplayers}
-			alignItems="center"
-			alignContent="flex-start"
-			justify="center"
-		>
-			<DialogTitle>Select your player</DialogTitle>
-			{otherPlayers.map((player) => {
-				return (
-					<>
-						<Grid
-							item
-							key={player.id}
-							xs={getPlayersPerRow(otherPlayers.length)}
-						>
-							<Avatar
-								style={{ cursor: 'pointer' }}
-								connectionState={'connected'}
-								player={player}
-								talking={false}
-								borderColor="#2ecc71"
-								isAlive={true}
-								size={50}
-								onSelect={onSubmit}
-							/>
-						</Grid>
-					</>
-				);
-			})}
-		</Grid>
+		<>
+			<Grid
+				container
+				spacing={1}
+				className={classes.otherplayers}
+				alignItems="center"
+				alignContent="flex-start"
+				justify="center"
+			>
+				<DialogTitle>Select your player</DialogTitle>
+				{otherPlayers.map((player) => {
+					return (
+						<>
+							<Grid
+								item
+								key={player.id}
+								xs={getPlayersPerRow(otherPlayers.length)}
+							>
+								<Avatar
+									style={{ cursor: 'pointer' }}
+									connectionState={'connected'}
+									player={player}
+									talking={false}
+									borderColor="#2ecc71"
+									isAlive={true}
+									size={50}
+									onSelect={onSubmit}
+								/>
+							</Grid>
+						</>
+					);
+				})}
+			</Grid>
+			<Button
+				color="primary"
+				onClick={ () => document.location.reload() }
+			>&lt; Back</Button>
+		</>
 	);
 };
 
