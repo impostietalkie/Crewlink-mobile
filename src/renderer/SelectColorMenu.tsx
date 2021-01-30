@@ -60,8 +60,9 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 	const onSubmit = (player: Player) => {
 		setPlayer(player);
 		const cookies = new Cookies();
-		cookies.set('selectedPlayer', player, { path: '/' });
-		cookies.set('selectedRoomCode', roomCode, { path: '/' });
+		const TWELVE_HOURS_IN_SECONDS
+		cookies.set('selectedPlayer', player, { path: '/', maxAge: 43200 });
+		cookies.set('selectedRoomCode', roomCode, { path: '/', maxAge: 43200 });
 		axios.put(`${settings.serverURL}selectedPlayer?roomCode=${roomCode}&playerName=${player.name}`)
 	}
 

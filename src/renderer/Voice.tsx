@@ -547,6 +547,8 @@ const Voice: React.FC<VoiceProps> = function ({
 			autoGainControl: false,
 			googAutoGainControl: false,
 			googAutoGainControl2: false,
+			echoCancellation: true,
+			noiseSuppression: false,
 		};
 
 		// Get microphone settings
