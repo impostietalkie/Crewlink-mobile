@@ -23,6 +23,8 @@ import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import SupportLink from './SupportLink';
 import Divider from '@material-ui/core/Divider';
+import { Button } from '@material-ui/core';
+import Cookies from 'universal-cookie';
 
 export interface ExtendedAudioElement extends HTMLAudioElement {
 	setSinkId: (sinkId: string) => Promise<void>;
@@ -860,6 +862,11 @@ const Voice: React.FC<VoiceProps> = function ({
 		}
 	}, [myPlayer?.id]);
 
+	const clearCookie = (name: string) => {
+		const cookies = new Cookies();
+		cookies.remove(name);
+	}
+
 	const playerSocketIds: {
 		[index: number]: string;
 	} = {};
@@ -950,6 +957,16 @@ const Voice: React.FC<VoiceProps> = function ({
 					);
 				})}
 			</Grid>
+			<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+				<Button
+					color="primary" 
+					onClick={() => {
+						clearCookie('selectedPlayer');
+						clearCookie('selectedRoomCode');
+						document.location.reload();
+					}}
+				>Leave Lobby</Button>
+			</div>
 		</div>
 	);
 };

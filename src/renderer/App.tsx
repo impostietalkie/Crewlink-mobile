@@ -3,6 +3,7 @@ import React, {
 	ErrorInfo,
 	ReactChild,
 	SetStateAction,
+	useEffect,
 	useReducer,
 	useState,
 } from 'react';
@@ -240,6 +241,11 @@ const App: React.FC = function () {
 		return cookies.get(name) ?? defaultVal;
 	}
 
+	useEffect(() => {
+		setPlayer(getCookieSettingWithDefault('selectedPlayer', undefined));
+		setRoomCode(getCookieSettingWithDefault('selectedRoomCode', undefined));
+	}, []);
+	
 	const settings = useReducer(settingsReducer, {
 		alwaysOnTop: getCookieSettingWithDefault('alwaysOnTop', false),
 		microphone: getCookieSettingWithDefault('microphone', 'Default'),

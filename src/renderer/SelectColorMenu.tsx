@@ -8,6 +8,7 @@ import { AmongUsState, Player } from '../common/AmongUsState';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from 'axios';
 import { SettingsContext } from './contexts';
+import Cookies from 'universal-cookie';
 
 const useStyles = makeStyles(() => ({
 	otherplayers: {
@@ -56,6 +57,13 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 		return () => clearInterval(interval);
 	}, [roomCode]);
 	
+	const onSubmit = (player: Player) => {
+		setPlayer(player);
+		const cookies = new Cookies();
+		cookies.set('selectedPlayer', player, { path: '/' });
+		cookies.set('selectedRoomCode', roomCode, { path: '/' });
+	}
+
 	return (
 		<Grid
 			container
@@ -82,7 +90,7 @@ const SelectColorMenu: React.FC<IOwnProps> = function ({
 								borderColor="#2ecc71"
 								isAlive={true}
 								size={50}
-								onSelect={setPlayer}
+								onSelect={onSubmit}
 							/>
 						</Grid>
 					</>
